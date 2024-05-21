@@ -4,6 +4,7 @@ import br.ada.caixa.dto.filter.ClientePfFilterDto;
 import br.ada.caixa.dto.request.ClientePfRequestDto;
 import br.ada.caixa.dto.response.ClientePfResponsetDto;
 import br.ada.caixa.entity.ClientePf;
+import br.ada.caixa.enums.StatusCliente;
 import br.ada.caixa.exceptions.ValidacaoException;
 import br.ada.caixa.repository.ClientePfRepository;
 import org.modelmapper.ModelMapper;
@@ -21,11 +22,14 @@ public class ClientePfService {
     public ClientePfService(ClientePfRepository clientePfRepository, ModelMapper modelMapper) {
         this.clientePfRepository = clientePfRepository;
         this.modelMapper         = modelMapper;
+        this.modelMapper.typeMap(ClientePfRequestDto.class, ClientePf.class)
+                .addMapping(ClientePfRequestDto::getCpf, ClientePf::setDocumento);
     }
 
     @Transactional
     public ClientePfResponsetDto inserir(ClientePfRequestDto clientePfRequestDto) {
         ClientePf clientePf                         = modelMapper.map(clientePfRequestDto, ClientePf.class);
+        clientePf.setStatus(StatusCliente.ATIVO);
         clientePf = clientePfRepository.save(clientePf);
         ClientePfResponsetDto clientePfResponsetDto = modelMapper.map(clientePf, ClientePfResponsetDto.class);
 

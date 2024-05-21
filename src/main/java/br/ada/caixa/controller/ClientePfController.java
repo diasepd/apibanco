@@ -3,6 +3,7 @@ package br.ada.caixa.controller;
 import br.ada.caixa.dto.filter.ClientePfFilterDto;
 import br.ada.caixa.dto.request.ClientePfRequestDto;
 import br.ada.caixa.dto.response.ClientePfResponsetDto;
+import br.ada.caixa.enums.StatusCliente;
 import br.ada.caixa.service.ClientePfService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/clientes/pf")
 public class ClientePfController {
 
     final private ClientePfService clientePfService;
@@ -20,7 +21,7 @@ public class ClientePfController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientePfResponsetDto> inserir(@RequestBody ClientePfRequestDto clientePfRequestDto) {
+    public ResponseEntity<?> inserir(@RequestBody ClientePfRequestDto clientePfRequestDto) {
         ClientePfResponsetDto clientePfResponsetDto = clientePfService.inserir(clientePfRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(clientePfResponsetDto);
     }
@@ -46,5 +47,11 @@ public class ClientePfController {
     public ResponseEntity<List<ClientePfResponsetDto>> listarTodos(ClientePfFilterDto filter) {
         List<ClientePfResponsetDto> listaClientesPf = clientePfService.listarTodos(filter);
         return ResponseEntity.ok(listaClientesPf);
+    }
+
+    @PatchMapping("/{cpf}/{status}")
+    public ResponseEntity<?> atualizarStatus(@PathVariable String cpf,
+                                             @PathVariable StatusCliente status) {
+        return null;
     }
 }
